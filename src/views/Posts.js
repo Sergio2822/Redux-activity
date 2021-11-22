@@ -22,7 +22,7 @@ const style = {
 
 function Posts() {
     const dispatch = useDispatch();
-    const items = useSelector(state => state.Posts.users);
+    const items = useSelector(state => state.users.users);
 
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);

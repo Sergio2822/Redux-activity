@@ -3,33 +3,33 @@ import {Button} from '@mui/material';
 import { useParams, useHistory, Redirect } from 'react-router-dom';
 import Nav from '../components/Nav';
 import '../App.css';
-
-
+import { useDispatch, useSelector } from 'react-redux';
+import {setSelectedUser} from '../features/PostReducer/PostsSlice'
 function PostById() {
     const params = useParams();
     const history = useHistory();
+    const dispatch = useDispatch();
 
     useEffect(() =>{
         fetchItem();
     },[]);
     
-    const[item ,setItem] = useState({});
     
     const handleReturnToPosts= () => {
       history.push('/posts');
      };
 
     const fetchItem = async() => {
-        const data = await fetch(`https://jsonplaceholder.typicode.com/posts/${params.id}`);
-
-        const item = await data.json();
-        setItem(item);
+        dispatch(setSelectedUser(params.id)); //update ID
+        
     }
+    const itm = useSelector(state => state.users.users);
+
   return (
     <div>
         <Nav/>
-        <h1>{item.title}</h1>
-        <h2>{item.body}</h2>
+        <h1>{itm[params.id - 1].title}</h1>
+        <h2>{itm[params.id - 1].body}</h2>
         <Button
         style={{ marginTop: '2rem' }}
         color='primary'
