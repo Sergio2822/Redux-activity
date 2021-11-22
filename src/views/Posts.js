@@ -3,60 +3,54 @@ import '../App.css';
 import Nav from '../components/Nav';
 import PostCard from '../components/PostCard';
 import Grid from '@mui/material/Grid'; 
-import {Box,Button, Typography} from '@mui/material';
-import Stack from '@mui/material/Stack';
-import {useLocation,useHistory} from 'react-router-dom';
+import {Box,Button, Typography,Modal} from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import {getPosts} from '../features/PostReducer/PostsThunks.js'
+import PostForm from "../components/AddPostForm"
 
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+};
 
 function Posts() {
+    const dispatch = useDispatch();
+    const items = useSelector(state => state.Posts.users);
 
-    const history = useHistory();
-    const location = useLocation();
-    const[items ,setItems] = useState([]);
-    const[currentPage, setCurrentPage] = useState(1);
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
 
-    const previousPage = () =>{ 
-        setCurrentPage(currentPage === 1 ? 1:currentPage - 1);
-        console.log(currentPage); 
-    }
-
-    const nextPage = () =>{
-        setCurrentPage(currentPage === 10 ? 10:currentPage + 1);
-        console.log(currentPage);
-    }
     useEffect(() =>{
-        const fetchItems = async() => {
-            const data = await fetch(`https://jsonplaceholder.typicode.com/posts?_page=${currentPage}`);
-            history.replace(`${location.pathname}?page=${currentPage}`);
-            const items = await data.json();
-            setItems(items);
-        };
-        fetchItems();
-    },[currentPage])
+        if(items.length === 0){
+            dispatch(getPosts());
+        }
+    },[])
 
   return (
     <div>
         <Nav/>
+        <div >
+      <Button onClick={handleOpen}>Add Post</Button>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+            <PostForm/>
+        </Box>
+      </Modal>
+    </div>
         <Box style ={{padding: 20}}>
-            <Stack spacing={2} justifyContent="space-around" p={4}>
-            <Button
-            size='small'
-            color='primary'
-            onClick={previousPage}
-            >
-            Last page
-            </Button>
-            <Typography component='h5' variant='h4'>
-            {`Page: ${currentPage}`}
-            </Typography>
-            <Button
-            size='small'
-            color='primary'
-            onClick={nextPage}
-            >
-             Next page 
-            </Button>
-            </Stack>
             <Grid container spacing={4} justifyContent="center">
                 {
                 items.map(item => (

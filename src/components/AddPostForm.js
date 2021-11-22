@@ -2,7 +2,7 @@ import React,{useState} from 'react';
 import TextField from '@mui/material/TextField';
 import {Button} from '@mui/material';
 
-function LoginForm({Login,error}) {
+function AddPostForm({Login}) {
 
     const[details,setDetails]=useState({email:"", password:""});
  
@@ -18,18 +18,17 @@ function LoginForm({Login,error}) {
                 justifyContent:"center",
                 gap:"15px"
             }}>
-                <h2>Log in</h2>
-                {(error != "")?(<div className="error">{error}</div>):""}
+                <h2>Post Info</h2>
                 <div className="form-group">
-                    <TextField type="email" label="email" id="email" onChange = {e => setDetails({...details, email: e.target.value})}  value={details.email} />
+                    <TextField multiline  label="Title" id="Body" onChange = {e => setDetails({...details, email: e.target.value})}  value={details.email} />
                 </div>
                 <div className="form-group">
-                    <TextField type="password" label="password" id="password" onChange = {e => setDetails({...details, password: e.target.value})}  value={details.password} />
+                    <TextField multiline label="Body" id="Body" onChange = {e => setDetails({...details, password: e.target.value})}  value={details.password} />
                 </div>
                 <div>
                     <Button
                     variant="contained"
-                    type="submit" value="LOGIN"
+                     value="LOGIN"
                     >
                     Submit
                     </Button>
@@ -40,4 +39,4 @@ function LoginForm({Login,error}) {
   );
 }
 
-export default LoginForm;
+export default AddPostForm;
